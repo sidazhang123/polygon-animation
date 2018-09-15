@@ -1,0 +1,68 @@
+@import "math";
+
+$res_x: (-1, -1);
+$res_y: (-1, -1);
+@for $i from 1 through 29 {
+
+  $x: random(3)/10+0.4;
+  $y: random(7)/10+0.1;
+  $z: random(5)/10+0.2;
+  $t: random(7s)+7s;
+  $trans_x: percentage(random(85) * cos(random(360deg)-180deg)) /100;
+
+  $trans_y: percentage(random(90) * sin(random(360deg)-180deg)) / 100;
+  $res_x: append($res_x, $trans_x);
+  $res_y: append($res_y, $trans_y);
+  @keyframes sliding#{$i} {
+    from {
+      transform: translate(0, 0); // rotate3d(0, 0, 0, 0deg);
+
+    }
+    60% {
+      transform: translate($trans_x * 0.9, $trans_y * 0.9);
+    }
+    to {
+      //transform:translate(nth($box_x,$i), nth($box_y,$i));
+      transform: translate($trans_x, $trans_y); // rotate3d($x,$y,$z,$d);
+
+    }
+  }
+  @keyframes rot#{$i}-inf {
+    from {
+
+      transform: translate($trans_x, $trans_y) rotate3d(0, 0, 0, 0deg);
+
+    }
+    50% {
+      @if $i%2==0 {
+
+        transform: translate($trans_x, $trans_y) rotate3d($x, $y, $z, 180deg);
+      } @else {
+
+        transform: translate($trans_x, $trans_y) rotate3d($x, $y, $z, -180deg);
+      }
+    }
+    to {
+      @if $i%2==0 {
+
+        transform: translate($trans_x, $trans_y) rotate3d($x, $y, $z, 360deg);
+      } @else {
+
+        transform: translate($trans_x, $trans_y) rotate3d($x, $y, $z, -360deg);
+      }
+
+    }
+
+  }
+  .final-#{$i} {
+    //transform:rotate3d($x,$y,$z,0deg) translate3d(0px, 0px, 0px);
+    animation: sliding#{$i} 1500ms linear forwards,
+    rot#{$i}-inf $t linear 1500ms infinite;
+  }
+}
+
+.get_array {
+  x: $res_x;
+  y: $res_y;
+}
+
